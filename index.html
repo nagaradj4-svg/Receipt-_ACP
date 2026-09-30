@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Correspondence Register - Ariankuppam Commune Panchayat</title>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--tx:#1c2733;--mu:#5d6b7a;--pr:#0b5c8a;--bd:#d5dce4;--ok:#1b7a3d;--wa:#b26a00;--er:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#12181f;--card:#1b232c;--tx:#e6ebf0;--mu:#95a3b1;--pr:#5db4e8;--bd:#2f3b47;--ok:#5cc47f;--wa:#f0a94a;--er:#ff8a80}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:var(--pr);color:#fff;padding:10px 14px}header h1{margin:0;font-size:17px}header small{opacity:.85}
+nav{display:flex;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+nav button{flex:1;min-width:90px;border:0;background:none;color:var(--mu);padding:12px 8px;font-size:14px;font-weight:600;border-bottom:3px solid transparent;cursor:pointer}
+nav button.on{color:var(--pr);border-color:var(--pr)}
+main{max-width:1100px;margin:auto;padding:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:12px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.stat{text-align:center}.stat b{display:block;font-size:28px}.stat span{color:var(--mu);font-size:13px}
+label{display:block;font-size:12px;color:var(--mu);font-weight:600;margin-bottom:3px}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--bd);border-radius:7px;background:var(--bg);color:var(--tx);font:inherit}
+textarea{min-height:70px}
+.f{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.f .w{grid-column:1/-1}
+.b{display:inline-block;background:var(--pr);color:#fff;border:1px solid var(--pr);border-radius:7px;padding:9px 14px;font-weight:600;cursor:pointer;font-size:14px;text-decoration:none}
+.b.s{background:var(--card);color:var(--pr)}.b.d{background:var(--er);border-color:var(--er);color:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.rec{border-left:5px solid var(--wa)}.rec.closed{border-left-color:var(--ok)}.rec.over{border-left-color:var(--er)}
+.rec h4{margin:0 0 4px;font-size:15px}.meta{color:var(--mu);font-size:13px}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:700;border:1px solid currentColor}
+.tag.p{color:var(--wa)}.tag.c{color:var(--ok)}.tag.o{color:var(--er)}
+.bar{height:10px;background:var(--bd);border-radius:5px;overflow:hidden;flex:1}.bar i{display:block;height:100%;background:var(--pr)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:14px;z-index:20}
+.modal.on{display:flex}.modal .card{width:100%;max-width:820px;margin:auto}
+.chips span{display:inline-flex;gap:6px;align-items:center;background:var(--bg);border:1px solid var(--bd);border-radius:14px;padding:3px 10px;margin:3px;font-size:13px}
+.chips button{border:0;background:none;color:var(--er);cursor:pointer;font-size:16px;padding:0}
+.hide{display:none}#pa{display:none}
+@media print{body>*:not(#pa){display:none!important}#pa{display:block}#pa table{border-collapse:collapse;width:100%;font-size:11px}#pa td,#pa th{border:1px solid #000;padding:3px;text-align:left;vertical-align:top;word-break:break-word}#pa h2,#pa p{text-align:center;margin:2px}@page{margin:10mm}}
+</style></head><body>
+<header><h1>Ariankuppam Commune Panchayat</h1><small>Correspondence Receipt &amp; Monitoring Register</small></header>
+<nav id="nav"></nav>
+<main>
+<section id="v-dash"></section>
+<section id="v-list" class="hide">
+ <div class="card"><div class="f">
+  <div class="w"><label>Search (reg no, subject, action, remarks)</label><input id="q" placeholder="Type to search…"></div>
+  <div><label>Source</label><select id="fs"></select></div><div><label>Section</label><select id="fc"></select></div>
+  <div><label>Officer</label><select id="fo"></select></div><div><label>Status</label><select id="ft"><option value="">All</option><option value="Pending">Pending (incl. overdue)</option><option value="Closed">Closed</option><option value="Overdue">Overdue</option></select></div>
+  <div><label>Received from</label><input type="date" id="fd1"></div><div><label>Received to</label><input type="date" id="fd2"></div>
+ </div><div class="row" style="margin-top:10px"><button class="b s" onclick="clr()">Clear filters</button><button class="b" onclick="openP()">🖨 Print PDF</button><button class="b s" onclick="xl()">⬇ Excel</button><span id="cnt" class="meta"></span></div></div>
+ <div id="lst"></div>
+</section>
+<section id="v-new" class="hide"></section>
+<section id="v-set" class="hide"></section>
+</main>
+
+<div class="modal" id="pm"><div class="card"><h3>Print – choose fields</h3><div id="pf" class="row" style="gap:14px"></div>
+<div style="margin-top:12px;max-width:260px"><label>Page orientation</label><select id="ori"><option value="auto">Auto (by number of fields)</option><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div>
+<div class="row" style="margin-top:12px"><button class="b" onclick="doPrint()">Print / Save as PDF</button><button class="b s" onclick="cm('pm')">Cancel</button></div>
+<p class="meta">Prints the currently filtered records. In the print dialog choose “Save as PDF”.</p></div></div>
+<div class="modal" id="km"><div class="card" style="max-width:380px"><p id="km_m"></p><input id="km_i" type="password" class="hide"><div class="row" style="margin-top:10px"><button class="b" id="km_ok">OK</button><button class="b s" id="km_no">Cancel</button></div></div></div>
+<div class="modal" id="am"><div class="card"><h3>Record action taken</h3><div class="f"><div class="w"><label>Action Taken by Officer</label><textarea id="qa_act"></textarea></div><div><label>Date of Action</label><input type="date" id="qa_ad"></div><div><label>Status</label><select id="qa_st"><option>Pending</option><option>Closed</option></select></div><div><label>Date of Furnishing Report / Reply</label><input type="date" id="qa_rd"></div></div><div class="row" style="margin-top:12px"><button class="b" onclick="qsave()">💾 Save</button><button class="b s" onclick="cm('am')">Cancel</button></div></div></div>
+<div id="ts" style="position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:8px;display:none;z-index:50;max-width:90%"></div>
+<div id="pa"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+function toast(m){const t=$('ts');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',3500)}
+function ask(msg,inp){return new Promise(res=>{$('km_m').textContent=msg;const i=$('km_i');i.value='';i.classList.toggle('hide',!inp);$('km').classList.add('on');if(inp)i.focus();const d=v=>{$('km').classList.remove('on');res(v)};$('km_ok').onclick=()=>d(inp?i.value:true);$('km_no').onclick=()=>d(inp?null:false)})}
+let qid='';
+function qa(id){const r=D.recs.find(x=>x.id===id);qid=id;$('qa_act').value=r.act||'';$('qa_ad').value=r.ad||today();$('qa_st').value=r.status;$('qa_rd').value=r.rd||'';$('am').classList.add('on')}
+function qsave(){const r=D.recs.find(x=>x.id===qid);if(!r||r.locked)return;r.act=$('qa_act').value.trim();r.ad=$('qa_ad').value;r.status=$('qa_st').value;r.rd=$('qa_rd').value;if(r.status==='Closed'&&!r.rd)r.rd=today();save();cm('am');list();toast('Action recorded')}
+const K='acp_reg_v1';
+const DEF={src:['Public','Government Department','Collectorate','Director LAD','Local Administration Dept','Court','Other Panchayat/Commune'],sec:['Engineering','Revenue','Accounts','General','Health/Sanitation'],off:['Commissioner','Junior Engineer','Assistant Engineer','Revenue Inspector','Head Clerk','Accountant'],mode:['Post','By Hand','Email','Online/Portal','Fax'],pin:'1234',folder:''};
+let D;try{D=JSON.parse(localStorage.getItem(K))}catch(e){}
+if(!D||!D.recs)D={recs:[],...JSON.parse(JSON.stringify(DEF)),seq:0};
+if(D.folder===undefined)D.folder='';
+function save(){try{localStorage.setItem(K,JSON.stringify(D))}catch(e){toast('Storage unavailable – please use Backup regularly.')}}
+const today=()=>new Date().toISOString().slice(0,10);
+const fmt=d=>d?d.split('-').reverse().join('-'):'';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:'';
+const over=r=>r.status!=='Closed'&&r.due&&r.due<today();
+const stat=r=>r.status==='Closed'?'Closed':over(r)?'Overdue':'Pending';
+const tabs=[['dash','📊 Dashboard'],['list','📋 Register'],['new','➕ New Entry'],['set','⚙ Settings']];
+$('nav').innerHTML=tabs.map(t=>`<button data-t="${t[0]}" onclick="go('${t[0]}')">${t[1]}</button>`).join('');
+function show(t){tabs.forEach(x=>$('v-'+x[0]).classList.toggle('hide',x[0]!==t));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0)}
+function go(t){show(t);if(t==='dash')dash();if(t==='list'){fillF();list()}if(t==='new')form();if(t==='set')sett()}
+function opts(a,first){return (first!==undefined?`<option value="">${first}</option>`:'')+a.map(x=>`<option>${esc(x)}</option>`).join('')}
+
+function dash(){const R=D.recs,p=R.filter(r=>r.status!=='Closed'),o=R.filter(over),c=R.filter(r=>r.status==='Closed');
+ const m=today().slice(0,7),tm=R.filter(r=>r.recd.startsWith(m)).length;
+ const grp=k=>{const g={};p.forEach(r=>g[r[k]||'-']=(g[r[k]||'-']||0)+1);const mx=Math.max(1,...Object.values(g));
+  return Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<div class="row" style="margin:5px 0"><span style="width:42%;font-size:13px">${esc(n)}</span><div class="bar"><i style="width:${v/mx*100}%"></i></div><b>${v}</b></div>`).join('')||'<p class="meta">No pending items 🎉</p>'};
+ $('v-dash').innerHTML=`<div class="grid"><div class="card stat"><b>${R.length}</b><span>Total received</span></div><div class="card stat"><b style="color:var(--wa)">${p.length}</b><span>Pending</span></div><div class="card stat"><b style="color:var(--er)">${o.length}</b><span>Overdue</span></div><div class="card stat"><b style="color:var(--ok)">${c.length}</b><span>Closed</span></div><div class="card stat"><b>${tm}</b><span>Received this month</span></div></div>
+ <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))"><div class="card"><h4>Pending by officer</h4>${grp('fwd')}</div><div class="card"><h4>Pending by section</h4>${grp('sec')}</div><div class="card"><h4>Pending by source</h4>${grp('src')}</div></div>
+ <div class="card"><h4>Overdue items</h4>${o.slice(0,8).map(r=>`<div class="meta" style="padding:4px 0">• <b>${esc(r.reg)}</b> ${esc(r.subj.slice(0,70))} – ${esc(r.fwd)} (due ${fmt(r.due)})</div>`).join('')||'<p class="meta">None</p>'}</div>`}
+
+function nextReg(){return (D.seq+1)+'/'+new Date().getFullYear()}
+function form(id){const r=id?D.recs.find(x=>x.id===id):{id:'',reg:nextReg(),regd:today(),recd:today(),mode:'Post',status:'Pending'};
+ const dis=r.locked?'disabled':'';const fl=safeUrl(D.folder);
+ $('v-new').innerHTML=`<div class="card"><h3>${id?'Edit Entry – ID '+esc(r.id):'New Receipt Entry'}</h3>${r.locked?'<p class="tag o">🔒 Locked – unlock from Register to edit</p>':''}
+ <div class="f"><div><label>Registration No *</label><input id="e_reg" value="${esc(r.reg)}" ${dis}></div>
+ <div><label>Registration Date *</label><input type="date" id="e_regd" value="${r.regd}" ${dis}></div>
+ <div><label>Date Received *</label><input type="date" id="e_recd" value="${r.recd}" ${dis}></div>
+ <div><label>Mode of Receipt</label><select id="e_mode" ${dis}>${opts(D.mode)}</select></div>
+ <div><label>Letter / Ref No</label><input id="e_lno" value="${esc(r.lno)}" ${dis}></div>
+ <div><label>Letter Date</label><input type="date" id="e_ld" value="${r.ld||''}" ${dis}></div>
+ <div><label>Source of Letter *</label><select id="e_src" ${dis}>${opts(D.src)}</select></div>
+ <div><label>Sender name / Address</label><input id="e_snd" value="${esc(r.snd)}" ${dis}></div>
+ <div class="w"><label>Subject / Description *</label><textarea id="e_subj" ${dis}>${esc(r.subj)}</textarea></div>
+ <div class="w"><label>Letter PDF – Google Drive share link</label><div class="row"><input id="e_pdf" style="flex:1;min-width:180px" placeholder="https://drive.google.com/file/d/…" value="${esc(r.pdf)}" ${dis}>${fl?`<a class="b s" href="${esc(fl)}" target="_blank" rel="noopener">📁 Open Drive folder</a>`:''}</div><p class="meta" style="margin:4px 0 0">Upload the scanned letter to Drive (name it with the Reg No), then paste its share link here.</p></div>
+ <div><label>Section *</label><select id="e_sec" ${dis}>${opts(D.sec)}</select></div>
+ <div><label>Forwarded To (Action Officer) *</label><select id="e_fwd" ${dis}>${opts(D.off)}</select></div>
+ <div><label>Date Forwarded</label><input type="date" id="e_fd" value="${r.fd||r.recd}" ${dis}></div>
+ <div><label>Due Date for Report</label><input type="date" id="e_due" value="${r.due||''}" ${dis}></div>
+ <div class="w"><label>Action Taken by Officer</label><textarea id="e_act" ${dis}>${esc(r.act)}</textarea></div>
+ <div><label>Date of Action</label><input type="date" id="e_ad" value="${r.ad||''}" ${dis}></div>
+ <div><label>Status</label><select id="e_st" ${dis}><option>Pending</option><option>Closed</option></select></div>
+ <div><label>Date of Furnishing Report / Reply</label><input type="date" id="e_rd" value="${r.rd||''}" ${dis}></div>
+ <div><label>Remarks</label><input id="e_rem" value="${esc(r.rem)}" ${dis}></div></div>
+ <div class="row" style="margin-top:12px">${r.locked?'':`<button class="b" onclick="saveRec('${id||''}')">💾 Save</button>`}<button class="b s" onclick="go('list')">Back</button></div></div>`;
+ [['mode',r.mode],['src',r.src],['sec',r.sec],['fwd',r.fwd],['st',r.status]].forEach(([k,v])=>{if(v!==undefined)$('e_'+k).value=v});
+ show('new')}
+function saveRec(id){const g=k=>$('e_'+k).value.trim();
+ const o={reg:g('reg'),regd:g('regd'),recd:g('recd'),mode:g('mode'),lno:g('lno'),ld:g('ld'),src:g('src'),snd:g('snd'),subj:g('subj'),pdf:g('pdf'),sec:g('sec'),fwd:g('fwd'),fd:g('fd'),due:g('due'),act:g('act'),ad:g('ad'),status:g('st'),rd:g('rd'),rem:g('rem')};
+ if(!o.reg||!o.regd||!o.recd||!o.subj||!o.src||!o.sec||!o.fwd)return toast('Please fill all fields marked *');
+ if(o.pdf&&!safeUrl(o.pdf))return toast('Letter PDF link must start with http:// or https://');
+ if(D.recs.some(r=>r.reg===o.reg&&r.id!==id&&r.regd.slice(0,4)===o.regd.slice(0,4)))return toast('Registration No already used this year.');
+ if(o.status==='Closed'&&!o.rd)o.rd=today();
+ if(id){Object.assign(D.recs.find(r=>r.id===id),o)}
+ else{D.seq++;o.id='ACP-'+new Date().getFullYear()+'-'+String(D.seq).padStart(4,'0');o.locked=false;D.recs.unshift(o)}
+ save();go('list')}
+
+function fillF(){const keep=[fs.value,fc.value,fo.value];fs.innerHTML=opts(D.src,'All sources');fc.innerHTML=opts(D.sec,'All sections');fo.innerHTML=opts(D.off,'All officers');[fs.value,fc.value,fo.value]=keep}
+['q','fs','fc','fo','ft','fd1','fd2'].forEach(i=>$(i).addEventListener('input',()=>list()));
+function clr(){['q','fs','fc','fo','ft','fd1','fd2'].forEach(i=>$(i).value='');list()}
+function filt(){const q=$('q').value.toLowerCase();return D.recs.filter(r=>
+ (!q||[r.id,r.reg,r.subj,r.act,r.rem,r.snd,r.lno].join(' ').toLowerCase().includes(q))&&(!fs.value||r.src===fs.value)&&(!fc.value||r.sec===fc.value)&&(!fo.value||r.fwd===fo.value)&&
+ (!ft.value||stat(r)===ft.value||(ft.value==='Pending'&&r.status!=='Closed'))&&(!fd1.value||r.recd>=fd1.value)&&(!fd2.value||r.recd<=fd2.value))}
+function list(){const R=filt();$('cnt').textContent=R.length+' of '+D.recs.length+' records';
+ $('lst').innerHTML=R.map(r=>{const s=stat(r),u=safeUrl(r.pdf);return `<div class="card rec ${s==='Closed'?'closed':s==='Overdue'?'over':''}">
+ <div class="row" style="justify-content:space-between"><b>Reg ${esc(r.reg)} · ${fmt(r.regd)}</b><span class="tag ${s==='Closed'?'c':s==='Overdue'?'o':'p'}">${s}</span></div>
+ <h4>${esc(r.subj)}</h4>
+ <div class="meta">ID: ${esc(r.id)} · ${esc(r.src)}${r.snd?' ('+esc(r.snd)+')':''} · ${esc(r.mode)} · Received ${fmt(r.recd)}<br>Section: ${esc(r.sec)} · Forwarded to: <b>${esc(r.fwd)}</b> ${r.due?'· Due '+fmt(r.due):''}</div>
+ ${r.act?`<div style="margin-top:6px"><b>Action:</b> ${esc(r.act)} ${r.ad?'<span class="meta">('+fmt(r.ad)+')</span>':''}</div>`:''}
+ ${r.rd?`<div class="meta">Report furnished on ${fmt(r.rd)}</div>`:''}
+ <div class="row" style="margin-top:8px">${u?`<a class="b" href="${esc(u)}" target="_blank" rel="noopener">📎 Open letter</a>`:''}${r.locked?'':`<button class="b" onclick="qa('${r.id}')">📝 Record action</button>`}<button class="b s" onclick="form('${r.id}')">${r.locked?'👁 View':'✏ Edit / Action'}</button>
+ <button class="b s" onclick="lock('${r.id}')">${r.locked?'🔓 Unlock':'🔒 Lock'}</button>${r.locked?'':`<button class="b d" onclick="del('${r.id}')">Delete</button>`}</div></div>`}).join('')||'<div class="card meta">No records found.</div>'}
+async function lock(id){const r=D.recs.find(x=>x.id===id);
+ if(!r.locked){if(r.status!=='Closed'&&!await ask('Entry is still pending. Lock anyway?'))return;r.locked=true}
+ else{const p=await ask('Enter admin PIN to unlock:',1);if(p!==D.pin)return toast('Wrong PIN');r.locked=false}save();list()}
+async function del(id){const p=await ask('Enter admin PIN to delete this entry permanently:',1);if(p===null)return;if(p!==D.pin)return toast('Wrong PIN');D.recs=D.recs.filter(r=>r.id!==id);save();list()}
+
+const COLS=[['id','ID No'],['reg','Reg No'],['regd','Reg Date'],['src','Source'],['snd','Sender'],['lno','Letter No'],['subj','Subject'],['recd','Date Received'],['mode','Mode'],['sec','Section'],['fwd','Forwarded To'],['fd','Date Forwarded'],['due','Due Date'],['act','Action Taken'],['ad','Action Date'],['status','Status'],['rd','Report Furnished On'],['pdf','Letter PDF Link'],['rem','Remarks']];
+const DATES=['regd','recd','fd','due','ad','rd'];
+const val=(r,k)=>k==='status'?stat(r):DATES.includes(k)?fmt(r[k]):(r[k]??'');
+$('pf').innerHTML=COLS.map(c=>`<label style="display:flex;gap:5px;align-items:center;font-size:14px;color:var(--tx)"><input type="checkbox" style="width:auto" value="${c[0]}" ${['reg','regd','src','subj','recd','fwd','status'].includes(c[0])?'checked':''}>${c[1]}</label>`).join('');
+function openP(){$('pm').classList.add('on')}function cm(i){$(i).classList.remove('on')}
+function doPrint(){const sel=[...document.querySelectorAll('#pf input:checked')].map(i=>i.value);if(!sel.length)return toast('Select at least one field');
+ const cs=COLS.filter(c=>sel.includes(c[0])),R=filt();
+ let o=$('ori').value;if(o==='auto')o=sel.length<=5?'portrait':'landscape';
+ let st=$('pgst');if(!st){st=document.createElement('style');st.id='pgst';document.head.appendChild(st)}st.textContent='@page{size:A4 '+o+';margin:10mm}';
+ $('pa').innerHTML=`<h2>Ariankuppam Commune Panchayat</h2><p>Correspondence Register${fd1.value||fd2.value?' ('+fmt(fd1.value)+' to '+fmt(fd2.value)+')':''}${fs.value?' · Source: '+esc(fs.value):''}${fo.value?' · Officer: '+esc(fo.value):''}</p><p>Printed on ${fmt(today())} · ${R.length} records</p><table><tr><th>#</th>${cs.map(c=>`<th>${c[1]}</th>`).join('')}</tr>${R.map((r,i)=>`<tr><td>${i+1}</td>${cs.map(c=>`<td>${esc(val(r,c[0]))}</td>`).join('')}</tr>`).join('')}</table>`;
+ cm('pm');setTimeout(()=>print(),100)}
+function dl(name,data,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
+function xl(){const R=filt();const t=`<html><head><meta charset="utf-8"></head><body><table border="1"><tr>${COLS.map(c=>`<th>${c[1]}</th>`).join('')}</tr>${R.map(r=>`<tr>${COLS.map(c=>`<td>${esc(val(r,c[0]))}</td>`).join('')}</tr>`).join('')}</table></body></html>`;
+ dl('Correspondence_Register_'+today()+'.xls','\ufeff'+t,'application/vnd.ms-excel')}
+
+function chips(k,label){return `<div class="card"><h4>${label}</h4><div class="chips">${D[k].map((x,i)=>`<span>${esc(x)}<button title="Delete" onclick="rm('${k}',${i})">×</button></span>`).join('')}</div><div class="row" style="margin-top:8px"><input id="n_${k}" placeholder="Add new…" style="flex:1;min-width:150px"><button class="b" onclick="add('${k}')">Add</button></div></div>`}
+function sett(){$('v-set').innerHTML=chips('src','Sources of Letter')+chips('sec','Sections')+chips('off','Officers (Forwarded To)')+chips('mode','Modes of Receipt')+
+ `<div class="card"><h4>Google Drive folder for scanned letters</h4><div class="row"><input id="fol" style="flex:1;min-width:180px" placeholder="https://drive.google.com/drive/folders/…" value="${esc(D.folder)}"><button class="b" onclick="setFol()">Save</button></div></div>
+ <div class="card"><h4>Backup &amp; Restore</h4><p class="meta">Data is stored in this device's browser. Take a backup regularly and keep it safe (e.g. in Google Drive).</p><div class="row"><button class="b" onclick="bk()">⬇ Download Backup</button><label class="b s" style="margin:0">⬆ Restore Backup<input type="file" accept=".json" class="hide" onchange="rs(this)"></label></div></div>
+ <div class="card"><h4>Admin PIN (for unlock / delete)</h4><div class="row"><input id="np" type="password" placeholder="New PIN (default 1234)" style="flex:1;min-width:150px"><button class="b" onclick="setPin()">Change PIN</button></div></div>`}
+function add(k){const v=$('n_'+k).value.trim();if(!v)return;if(D[k].includes(v))return toast('Already exists');D[k].push(v);save();sett()}
+async function rm(k,i){const v=D[k][i],f={src:'src',sec:'sec',off:'fwd',mode:'mode'}[k];const used=D.recs.some(r=>r[f]===v);if(!await ask('Delete "'+v+'"?'+(used?' Existing records using it keep the old value.':'')))return;D[k].splice(i,1);save();sett()}
+function setFol(){const v=$('fol').value.trim();if(v&&!safeUrl(v))return toast('Link must start with https://');D.folder=v;save();toast('Saved')}
+function bk(){dl('ACP_Register_Backup_'+today()+'.json',JSON.stringify(D,null,1),'application/json')}
+function rs(el){const f=el.files[0];if(!f)return;const rd=new FileReader();rd.onload=async()=>{try{const x=JSON.parse(rd.result);if(!x.recs)throw 0;if(!await ask('Replace ALL current data with backup ('+x.recs.length+' records)?'))return;D=x;if(D.folder===undefined)D.folder='';save();toast('Restored');go('dash')}catch(e){toast('Invalid backup file')}};rd.readAsText(f)}
+function setPin(){const p=$('np').value.trim();if(p.length<4)return toast('PIN must be at least 4 characters');D.pin=p;save();$('np').value='';toast('PIN changed')}
+go('dash');
+</script></body></html>
